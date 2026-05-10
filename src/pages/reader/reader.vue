@@ -118,9 +118,12 @@ export default {
     },
     methods: {
         back() {
-            storage.addItem(this.$page.options.path, this.reader.getProgress()).then(() => {
+            this.save().then(() => {
                 this.$page.finish();
-            })
+            });
+        },
+         async save() {
+            await storage.addItem(this.$page.options.path, this.reader.getProgress());
         },
         love() {
             storage.addItem(this.$page.options.path, this.reader.getProgress(), 'favorite').then(() => {
@@ -170,6 +173,8 @@ export default {
             this.$page.$npage.on("backpressed", this._backpressed);
         },
         onHide() {
+            this.save();
+
             this.$page.$npage.setSupportBack(true);
             this.$page.$npage.off("backpressed", this._backpressed);
         },
