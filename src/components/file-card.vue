@@ -20,7 +20,7 @@ export default {
 @import "../styles/md-color.less";
 
 .wrapper {
-    height: 30vh;
+    min-height: 30vh;
     background-color: @neutral;
     border-radius: 6vh;
     padding: 3vh 7vh;
@@ -39,6 +39,7 @@ export default {
 }
 
 .text {
+    max-width: 90%;
     font-size: 10vh;
     color: @on-neutral;
 }

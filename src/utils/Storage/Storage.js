@@ -1,4 +1,4 @@
-import storage from 'storage';
+const storage = import('storage').catch(() => import('./FakeStorage'));
 
 const defaultSetting = {
     mode: 'page',
@@ -22,7 +22,7 @@ function getNow() {
 export default class Storage {
     async _get(key) {
         try {
-            const value = await storage.getStorage(key);
+            const value = await (await storage).default.getStorage(key);
             return JSON.parse(value);
         } catch (e) {
             return null;
@@ -31,7 +31,7 @@ export default class Storage {
 
     async _set(key, value) {
         try {
-            await storage.setStorage(key, JSON.stringify(value));
+            await (await storage).default.setStorage(key, JSON.stringify(value));
             return true;
         } catch (e) {
             return false;
