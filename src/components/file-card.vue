@@ -1,9 +1,11 @@
 <template>
-    <div class="wrapper" @click="$emit('click')">
-        <image class="icon" :src="node.isDirectory()
-            ? require('../assets/folder-icon.png?base64')
-            : require('../assets/file-icon.png?base64')" />
-        <text class="text">{{ node.name }}</text>
+    <div class="card" @click="$emit('click')">
+        <div class="wrapper">
+            <image class="icon" :src="node.isDirectory()
+                ? require('../assets/folder-icon.png?base64')
+                : require('../assets/file-icon.png?base64')" />
+            <text class="text">{{ node.name }}</text>
+        </div>
     </div>
 </template>
 
@@ -19,17 +21,21 @@ export default {
 <style lang="less" scoped>
 @import "../styles/md-color.less";
 
-.wrapper {
+.card {
     min-height: 30vh;
     background-color: @neutral;
     border-radius: 6vh;
     padding: 3vh 7vh;
-    align-items: center;
-    flex-direction: row;
+    justify-content: center;
 }
 
-.wrapper:active {
+.card:active {
     opacity: 0.6;
+}
+
+.wrapper {
+    flex-direction: row;
+    align-items: center;
 }
 
 .icon {
@@ -39,7 +45,6 @@ export default {
 }
 
 .text {
-    max-width: 90%;
     font-size: 10vh;
     color: @on-neutral;
 }

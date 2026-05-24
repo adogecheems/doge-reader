@@ -16,14 +16,15 @@
             </div>
             <scroller style="flex: 1;" @scroll="setOffsetY" v-else-if="reader.mode === 'scroll'" over-scroll="50px"
                 over-fling="50px">
-                <div ref="start" style="min-height: 100%;">
-                    <div style="margin: 8vh 0 8vh 0;">
-                        <IconButton :icon="require('../../assets/back.png?base64')" @click="prevChapter" />
-                    </div>
+                <div style="min-height: 100%;">
+                    <div ref="start" style="height: 10vh;" />
+                    <PageTurningButton :icon="require('../../assets/back.png?base64')" v-if="reader.chapterIndex !== 0"
+                        text="上一页" @click="prevChapter" style="margin: 6vh 4vh 7vh 0;" />
                     <text class="content" :class="{ 'content-larger': isLarger }">{{ reader.content }}</text>
-                    <div ref="end" style="margin: 8vh 6vh 8vh 0; align-items: flex-end;">
-                        <IconButton :icon="require('../../assets/next.png?base64')" @click="nextChapter" />
-                    </div>
+                    <PageTurningButton :icon="require('../../assets/next.png?base64')"
+                        v-if="reader.chapterIndex < reader.book.getChapterCount() - 1" text="下一页" @click="nextChapter"
+                        style="margin: 7vh 4vh 6vh 0;" />
+                    <div ref="end" style="height: 10vh;" />
                 </div>
             </scroller>
         </div>
@@ -60,6 +61,7 @@ import ButtonColumn from "../../components/button-column.vue";
 import Drawer from "../../components/drawer.vue";
 import IconButton from "../../components/icon-button.vue";
 import MenuCard from "../../components/menu-card.vue";
+import PageTurningButton from "../../components/page-turning-button.vue";
 import Toast from "../../components/toast.vue";
 
 import BookParser from '../../utils/BookParser/BookParser.js';
@@ -75,7 +77,8 @@ export default {
         IconButton,
         MenuCard,
         Toast,
-        Drawer
+        Drawer,
+        PageTurningButton
     },
     data() {
         return {
@@ -122,7 +125,7 @@ export default {
                 this.$page.finish();
             });
         },
-         async save() {
+        async save() {
             await storage.addItem(this.$page.options.path, this.reader.getProgress());
         },
         love() {

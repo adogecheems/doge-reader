@@ -20,21 +20,21 @@
       "size": 3610,
       "md5": "cfb7f4bbcd3eb218e9c20861dcb1e558"
     },
-    "back-a7a4b9d0.js.bin": {
-      "size": 2924,
-      "md5": "1bea3ce9f156fefb5258d7a04ad86ef0"
-    },
     "delete-73cf201b.js.bin": {
       "size": 2157,
       "md5": "596e31b014671d341501eadab70661bb"
+    },
+    "back-a7a4b9d0.js.bin": {
+      "size": 2924,
+      "md5": "1bea3ce9f156fefb5258d7a04ad86ef0"
     },
     "favorite.js.bin": {
       "size": 2460,
       "md5": "37648f359025eca732584e1a71a7db3f"
     },
     "filemanager.js.bin": {
-      "size": 11823,
-      "md5": "6231c7ab392482b3048bc3ab4b55ab37"
+      "size": 11860,
+      "md5": "3408aea84a8332f152e29bcac892b6b3"
     },
     "history-card-cc271e99.js.bin": {
       "size": 1146,
@@ -57,12 +57,12 @@
       "md5": "1d54f2d34f854e729cc795ba8024f7a8"
     },
     "reader.js.bin": {
-      "size": 18813,
-      "md5": "bf0e47db45c5cadaf804f1b97e092ab2"
+      "size": 19618,
+      "md5": "98b18d251847223a981999cb1e25d8ce"
     },
     "setting.js.bin": {
-      "size": 4422,
-      "md5": "c01541bacf0d86725932e559017fc4d5"
+      "size": 4417,
+      "md5": "07b7923975ec3a0a06ffa9cc2dca677c"
     },
     "assets/license.txt": {
       "size": 34523,
