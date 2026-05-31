@@ -4,7 +4,7 @@
             <image class="icon" :src="node.isDirectory()
                 ? require('../assets/folder-icon.png?base64')
                 : require('../assets/file-icon.png?base64')" />
-            <text class="text">{{ node.name }}</text>
+            <div style="flex: 1;"><text class="text">{{ node.name }}</text></div>
         </div>
     </div>
 </template>

@@ -17,14 +17,16 @@
             <scroller style="flex: 1;" @scroll="setOffsetY" v-else-if="reader.mode === 'scroll'" over-scroll="50px"
                 over-fling="50px">
                 <div style="min-height: 100%;">
-                    <div ref="start" style="height: 10vh;" />
+                    <div ref="start" />
                     <PageTurningButton :icon="require('../../assets/back.png?base64')" v-if="reader.chapterIndex !== 0"
                         text="上一页" @click="prevChapter" style="margin: 6vh 4vh 7vh 0;" />
+                    <div style="height: 10vh;" v-else />
                     <text class="content" :class="{ 'content-larger': isLarger }">{{ reader.content }}</text>
                     <PageTurningButton :icon="require('../../assets/next.png?base64')"
                         v-if="reader.chapterIndex < reader.book.getChapterCount() - 1" text="下一页" @click="nextChapter"
                         style="margin: 7vh 4vh 6vh 0;" />
-                    <div ref="end" style="height: 10vh;" />
+                    <div style="height: 10vh;" v-else />
+                    <div ref="end" />
                 </div>
             </scroller>
         </div>

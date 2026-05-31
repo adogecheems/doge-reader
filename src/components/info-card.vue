@@ -1,7 +1,7 @@
 <template>
     <div class="info-card">
         <text class="item-text">{{ item }}</text>
-        <text class="value-text">{{ value }}</text>
+        <div style="flex: 1;"><text class="value-text">{{ value }}</text></div>
     </div>
 </template>
 
@@ -31,12 +31,11 @@ export default {
 
 .item-text {
     color: @on-neutral;
-    font-size: 12vh;
+    font-size: 11vh;
 }
 
 .value-text {
     text-align: right;
-    max-width: 60%;
     color: @outline;
     font-size: 10vh;
 }

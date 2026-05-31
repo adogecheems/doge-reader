@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper" @click="$emit('click')">
-        <text class="name">{{ name }}</text>
+        <div style="flex: 1;"><text class="name">{{ name }}</text></div>
         <text class="time">{{ time }}</text>
     </div>
 </template>
