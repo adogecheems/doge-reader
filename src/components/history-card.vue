@@ -34,6 +34,7 @@ export default {
 
 .name {
     font-size: 10vh;
+    margin-right: 5vh;
     color: @on-neutral;
 }
 

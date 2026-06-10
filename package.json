@@ -1,7 +1,7 @@
 {
   "name": "Doge阅读",
   "appid": "8001145141919811",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "一款为有道词典笔 OS 设计的第三方阅读器程序",
   "icon": "app_icon.png",
   "quickjs": {

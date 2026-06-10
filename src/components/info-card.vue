@@ -26,17 +26,18 @@ export default {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    background-color: @neutral;
+    background-color: @primary;
 }
 
 .item-text {
-    color: @on-neutral;
+    color: @on-primary;
+    margin-right: 5vh;
     font-size: 11vh;
 }
 
 .value-text {
     text-align: right;
-    color: @outline;
+    color: @neutral;
     font-size: 10vh;
 }
 </style>

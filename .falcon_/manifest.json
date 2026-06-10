@@ -1,6 +1,6 @@
 {
   "appName": "Doge阅读",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "appid": "8001145141919811",
   "icon": "app_icon.png",
   "quickjs": {
@@ -12,53 +12,53 @@
       "size": 1449,
       "md5": "ad82628dc09038611396dacf73255a20"
     },
-    "back-a7a4b9d0.js.bin": {
-      "size": 2924,
-      "md5": "1bea3ce9f156fefb5258d7a04ad86ef0"
-    },
     "Storage-bf78d62f.js.bin": {
       "size": 1604,
       "md5": "86b283103ab6684d9a84c43d1ec543c3"
+    },
+    "app.js.bin": {
+      "size": 3610,
+      "md5": "86c6a24b7695329ce3a3b603386698e2"
+    },
+    "back-a7a4b9d0.js.bin": {
+      "size": 2924,
+      "md5": "1bea3ce9f156fefb5258d7a04ad86ef0"
     },
     "delete-73cf201b.js.bin": {
       "size": 2157,
       "md5": "596e31b014671d341501eadab70661bb"
     },
-    "app.js.bin": {
-      "size": 3610,
-      "md5": "0d75d601bb4d4e9a0cd4c0b413fae997"
-    },
     "favorite.js.bin": {
       "size": 2460,
-      "md5": "dd54f4805a02d5cda604f86823f0bc9e"
+      "md5": "a7f4d6a9a2d97756b39276eb17214fb7"
     },
     "filemanager.js.bin": {
       "size": 11887,
       "md5": "7f820c0a9c7cc4400e85e7e8650acf9f"
     },
-    "history-card-0075171f.js.bin": {
-      "size": 1190,
-      "md5": "6dae6b20ae22342a5be119ee83c21542"
+    "history-card-56c0dfb5.js.bin": {
+      "size": 1216,
+      "md5": "ce5aa3aa3bdd53548ec1de0e705d40cd"
     },
     "history.js.bin": {
       "size": 2448,
-      "md5": "4a0931eb544533e6de7e2ccbd7aca16e"
+      "md5": "1f037640c9a212e208dbe650fdca97c6"
     },
     "index.js.bin": {
       "size": 26302,
-      "md5": "42927d58c26adaf0f7256eef9120912d"
+      "md5": "f17be319fe3bb8a570e656bc57c10d46"
     },
     "info.js.bin": {
-      "size": 698795,
-      "md5": "63993d84896b10aa26dd55c490620bf1"
+      "size": 698821,
+      "md5": "a318280c6d6bea0d4af62bf4503a4e54"
     },
     "license.js.bin": {
       "size": 1835,
       "md5": "1d54f2d34f854e729cc795ba8024f7a8"
     },
     "reader.js.bin": {
-      "size": 19619,
-      "md5": "5fcbf6854f759be6d72ce6386a8a64e4"
+      "size": 19616,
+      "md5": "0743daa8a3f9770b77f15e2b05842c61"
     },
     "setting.js.bin": {
       "size": 4417,
