@@ -6,9 +6,8 @@
  * go through that runtime API instead of importing Node-only modules.
  */
 
-function getExecShell() {
-    // Different firmware builds expose the injected bridge under slightly
-    // different global scopes. Resolve it lazily so desktop preview can load.
+async function getExecShell() {
+    // Some firmware exposes an already-instantiated global object.
     if (typeof global !== 'undefined' && global
         && typeof global.execShell === 'function') {
         return global.execShell.bind(global);
@@ -21,6 +20,22 @@ function getExecShell() {
         if (typeof globalThis.execShell === 'function') {
             return globalThis.execShell.bind(globalThis);
         }
+    }
+
+    // PenMusic documents "global" as a system module. On builds where it is
+    // exposed as a module rather than a global variable, instantiate it here.
+    try {
+        const module = await import('global');
+        const Global = module.default || module.Global;
+        const api = Global && typeof Global === 'function'
+            ? new Global()
+            : (Global || module);
+
+        if (api && typeof api.execShell === 'function') {
+            return api.execShell.bind(api);
+        }
+    } catch (error) {
+        // Keep the final error focused on the missing platform capability.
     }
 
     throw new Error('当前设备未提供 global.execShell，无法访问本地文件');
@@ -42,12 +57,21 @@ function getOutput(result) {
 }
 
 async function execShell(command) {
-    const exec = getExecShell();
-    const result = await exec(command);
+    const exec = await getExecShell();
+    const result = await exec(command + '\\nprintf "\\n__READEX_STATUS__%s\\n" "$?"');
     const output = getOutput(result);
+    const match = output.match(/\\n__READEX_STATUS__(\\d+)\\s*$/);
 
-    // Some wrappers return {status, output}; string-only firmware builds
-    // generally reject commands by returning an error message.
+    if (match) {
+        const body = output.slice(0, match.index);
+        if (Number(match[1]) !== 0) {
+            throw new Error(body.trim() || ('Shell command failed: ' + command));
+        }
+        return body;
+    }
+
+    // A few wrappers return structured status instead of preserving the
+    // shell marker; support those without assuming stdout is always present.
     if (result && typeof result === 'object'
         && typeof result.status === 'number' && result.status !== 0) {
         throw new Error(output || ('Shell command failed: ' + command));
