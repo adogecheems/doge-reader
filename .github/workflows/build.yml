@@ -36,7 +36,7 @@ jobs:
         run: npm install --global aiot-vue-cli@1.0.32
 
       - name: Verify AIoT CLI
-        run: aiot-cli --version
+        run: aiot-cli -V
 
       - name: Build production package
         run: npm run build:prod
