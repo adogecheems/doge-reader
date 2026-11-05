@@ -115,6 +115,29 @@ async function readDirectory(path) {
     return result;
 }
 
+function decodeBytes(value) {
+    let bytes = value;
+
+    if (typeof ArrayBuffer !== 'undefined' && value instanceof ArrayBuffer) {
+        bytes = new Uint8Array(value);
+    }
+
+    if (typeof ArrayBuffer !== 'undefined' && ArrayBuffer.isView
+        && ArrayBuffer.isView(bytes)) {
+        if (typeof TextDecoder !== 'undefined') {
+            return new TextDecoder('utf-8').decode(bytes);
+        }
+
+        let binary = '';
+        for (let i = 0; i < bytes.length; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return decodeURIComponent(escape(binary));
+    }
+
+    return null;
+}
+
 async function readTextFile(path) {
     const { api } = await loadFileSystem();
     const value = await api.readFile(path);
@@ -124,12 +147,15 @@ async function readTextFile(path) {
     if (value && typeof value.content === 'string') return value.content;
     if (value && typeof value.data === 'string') return value.data;
 
-    if (value && typeof value.toString === 'function') {
-        const text = value.toString();
-        if (text !== '[object Object]') return text;
+    const decoded = value && decodeBytes(value);
+    if (decoded !== null) return decoded;
+
+    if (value && typeof value.toString === 'function'
+        && value.constructor && value.constructor.name === 'Buffer') {
+        return value.toString('utf8');
     }
 
-    throw new Error('File-system readFile() did not return text for: ' + path);
+    throw new Error('File-system readFile() did not return UTF-8 text for: ' + path);
 }
 
 export {
