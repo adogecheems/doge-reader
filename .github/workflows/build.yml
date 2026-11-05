@@ -32,6 +32,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install AIoT build CLI
+        run: npm install --global aiot-vue-cli@1.0.32
+
+      - name: Verify AIoT CLI
+        run: aiot-cli --version
+
       - name: Build production package
         run: npm run build:prod
 
