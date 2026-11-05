@@ -1,169 +1,91 @@
-const MODULE_NAMES = ['fs', 'file', 'fileSystem', 'io'];
+/**
+ * File access adapter for the dictionary-pen runtime.
+ *
+ * This device does not expose Node's "fs" module. PenMusic documents
+ * global.execShell as the portable fallback, so all file operations here
+ * go through that runtime API instead of importing Node-only modules.
+ */
 
-let fileSystemPromise = null;
+function getExecShell() {
+    // Different firmware builds expose the injected bridge under slightly
+    // different global scopes. Resolve it lazily so desktop preview can load.
+    if (typeof global !== 'undefined' && global
+        && typeof global.execShell === 'function') {
+        return global.execShell.bind(global);
+    }
 
-function joinPath(parent, name) {
-    return parent.endsWith('/') ? parent + name : parent + '/' + name;
+    if (typeof globalThis !== 'undefined') {
+        if (globalThis.global && typeof globalThis.global.execShell === 'function') {
+            return globalThis.global.execShell.bind(globalThis.global);
+        }
+        if (typeof globalThis.execShell === 'function') {
+            return globalThis.execShell.bind(globalThis);
+        }
+    }
+
+    throw new Error('当前设备未提供 global.execShell，无法访问本地文件');
 }
 
-function unwrapModule(module) {
-    if (!module) return null;
-
-    const defaultApi = module.default;
-    if (defaultApi && typeof defaultApi.readFile === 'function'
-        && typeof defaultApi.readdir === 'function') {
-        return defaultApi;
-    }
-
-    return module;
+function shellQuote(value) {
+    // POSIX single-quote escaping: ' -> '\''
+    return "'" + String(value).replace(/'/g, "'\\''") + "'";
 }
 
-async function loadFileSystem() {
-    if (!fileSystemPromise) {
-        fileSystemPromise = (async () => {
-            const errors = [];
-
-            for (const name of MODULE_NAMES) {
-                try {
-                    // Resolve platform modules at runtime so a missing optional
-                    // module does not prevent the reader pages from loading.
-                    const loaded = await import(name);
-                    const api = unwrapModule(loaded);
-
-                    if (api && typeof api.readFile === 'function'
-                        && typeof api.readdir === 'function') {
-                        return { api, name };
-                    }
-
-                    errors.push(name + ': missing readFile/readdir');
-                } catch (error) {
-                    errors.push(name + ': ' + String(error));
-                }
-            }
-
-            throw new Error('No supported file-system module found. ' + errors.join('; '));
-        })();
-    }
-
-    try {
-        return await fileSystemPromise;
-    } catch (error) {
-        // Allow a later retry if the runtime becomes available after startup.
-        fileSystemPromise = null;
-        throw error;
-    }
+function getOutput(result) {
+    if (typeof result === 'string') return result;
+    if (result == null) return '';
+    if (typeof result.output === 'string') return result.output;
+    if (typeof result.stdout === 'string') return result.stdout;
+    if (typeof result.data === 'string') return result.data;
+    if (typeof result.text === 'string') return result.text;
+    return String(result);
 }
 
-function getEntryType(entry) {
-    if (entry && typeof entry.isDirectory === 'function') {
-        return entry.isDirectory();
+async function execShell(command) {
+    const exec = getExecShell();
+    const result = await exec(command);
+    const output = getOutput(result);
+
+    // Some wrappers return {status, output}; string-only firmware builds
+    // generally reject commands by returning an error message.
+    if (result && typeof result === 'object'
+        && typeof result.status === 'number' && result.status !== 0) {
+        throw new Error(output || ('Shell command failed: ' + command));
     }
 
-    if (entry && typeof entry.isDirectory === 'boolean') {
-        return entry.isDirectory;
-    }
-
-    if (entry && typeof entry.type === 'string') {
-        return entry.type === 'directory' || entry.type === 'dir';
-    }
-
-    return null;
+    return output;
 }
 
 async function readDirectory(path) {
-    const { api } = await loadFileSystem();
-    let entries;
+    const quotedPath = shellQuote(path);
+    // -A omits . and ..; -p appends '/' to directory names. This avoids
+    // relying on Node Dirent objects or unsupported fs.readdir options.
+    const output = await execShell('LC_ALL=C ls -1Ap ' + quotedPath + ' 2>&1');
+    const lines = output.split(/\r?\n/).filter(Boolean);
 
-    try {
-        entries = await api.readdir(path, { withFileTypes: true });
-    } catch (error) {
-        // Some firmware builds expose readdir(path) but ignore Dirent options.
-        entries = await api.readdir(path);
+    if (lines.some(line => /^(ls:|cannot access|permission denied|not found)/i.test(line.trim()))) {
+        throw new Error(lines.join('\n'));
     }
 
-    if (!Array.isArray(entries)) {
-        throw new Error('File-system readdir() did not return an array');
-    }
-
-    const result = [];
-
-    for (const entry of entries) {
-        const name = typeof entry === 'string' ? entry : entry && entry.name;
-        if (!name || name === '.' || name === '..') continue;
-
-        let isDirectory = getEntryType(entry);
-
-        if (isDirectory === null && typeof api.stat === 'function') {
-            try {
-                const info = await api.stat(joinPath(path, name));
-                isDirectory = getEntryType(info);
-            } catch (error) {
-                // An entry that cannot be stat'ed is skipped rather than
-                // incorrectly presented as a readable book.
-                continue;
-            }
-        }
-
-        if (isDirectory === null) {
-            throw new Error('Cannot determine whether "' + name + '" is a directory');
-        }
-
-        result.push({
+    return lines.map(line => {
+        const isDirectory = line.endsWith('/');
+        const name = isDirectory ? line.slice(0, -1) : line;
+        return {
             name,
             isDirectory() {
                 return isDirectory;
             }
-        });
-    }
-
-    return result;
-}
-
-function decodeBytes(value) {
-    let bytes = value;
-
-    if (typeof ArrayBuffer !== 'undefined' && value instanceof ArrayBuffer) {
-        bytes = new Uint8Array(value);
-    }
-
-    if (typeof ArrayBuffer !== 'undefined' && ArrayBuffer.isView
-        && ArrayBuffer.isView(bytes)) {
-        if (typeof TextDecoder !== 'undefined') {
-            return new TextDecoder('utf-8').decode(bytes);
-        }
-
-        let binary = '';
-        for (let i = 0; i < bytes.length; i++) {
-            binary += String.fromCharCode(bytes[i]);
-        }
-        return decodeURIComponent(escape(binary));
-    }
-
-    return null;
+        };
+    }).filter(entry => entry.name && entry.name !== '.' && entry.name !== '..');
 }
 
 async function readTextFile(path) {
-    const { api } = await loadFileSystem();
-    const value = await api.readFile(path);
-
-    if (typeof value === 'string') return value;
-    if (value && typeof value.text === 'string') return value.text;
-    if (value && typeof value.content === 'string') return value.content;
-    if (value && typeof value.data === 'string') return value.data;
-
-    const decoded = value && decodeBytes(value);
-    if (decoded !== null) return decoded;
-
-    if (value && typeof value.toString === 'function'
-        && value.constructor && value.constructor.name === 'Buffer') {
-        return value.toString('utf8');
-    }
-
-    throw new Error('File-system readFile() did not return UTF-8 text for: ' + path);
+    // cat preserves UTF-8 text and does not require the unavailable fs module.
+    return execShell('cat ' + shellQuote(path) + ' 2>&1');
 }
 
 export {
-    loadFileSystem,
+    execShell,
     readDirectory,
     readTextFile
 };
