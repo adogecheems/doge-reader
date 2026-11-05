@@ -1,4 +1,4 @@
-import fs from 'fs';
+import { readDirectory } from '../FileSystem/FileSystem.js';
 
 export default class FileManager {
     constructor(root = "/userdisk/Favorite") {
@@ -22,12 +22,12 @@ export default class FileManager {
         this.error = false;
 
         try {
-            const list = await fs.readdir(this.cwd, { withFileTypes: true });
+            const list = await readDirectory(this.cwd);
             if (version !== this._version) return;
 
             this.nodeList = list
                 .filter(node =>
-                    node.isDirectory() || node.name.endsWith('.txt')
+                    node.isDirectory() || node.name.toLowerCase().endsWith('.txt')
                 )
                 .sort((a, b) => {
                     if (a.isDirectory() && !b.isDirectory()) return -1;
