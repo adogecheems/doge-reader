@@ -8,9 +8,13 @@ function joinPath(parent, name) {
 
 function unwrapModule(module) {
     if (!module) return null;
-    if (module.default && typeof module.default === 'object') {
-        return Object.assign({}, module, module.default);
+
+    const defaultApi = module.default;
+    if (defaultApi && typeof defaultApi.readFile === 'function'
+        && typeof defaultApi.readdir === 'function') {
+        return defaultApi;
     }
+
     return module;
 }
 
