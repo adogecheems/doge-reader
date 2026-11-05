@@ -60,7 +60,7 @@ async function execShell(command) {
     const exec = await getExecShell();
     const result = await exec(command + '\nprintf "\n__READEX_STATUS__%s\n" "$?"');
     const output = getOutput(result);
-    const match = output.match(/\n__READEX_STATUS__(\\d+)\\s*$/);
+    const match = output.match(/\n__READEX_STATUS__(\d+)\s*$/);
 
     if (match) {
         const body = output.slice(0, match.index);
