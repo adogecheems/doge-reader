@@ -10,7 +10,7 @@ export default class BookParser {
 
     async load() {
         this.text = await readTextFile(this.path);
-        this.text = this.text.replace(/\\r\\n/g, '\\n');
+        this.text = this.text.replace(/\r\n/g, '\n');
         this._parse();
         return new Book(this.text, this.chapters);
     }
@@ -39,7 +39,7 @@ export default class BookParser {
             'im'
         );
 
-        const lines = text.split('\\n');
+        const lines = text.split('\n');
         let index = 0;
         let matches = [];
 
