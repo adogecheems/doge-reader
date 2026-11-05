@@ -1,4 +1,4 @@
-import fs from 'fs';
+import { readTextFile } from '../FileSystem/FileSystem.js';
 import Book from './Book.js';
 
 export default class BookParser {
@@ -9,8 +9,8 @@ export default class BookParser {
     }
 
     async load() {
-        this.text = await fs.readFile(this.path);
-        this.text = this.text.replace(/\r\n/g, '\n');
+        this.text = await readTextFile(this.path);
+        this.text = this.text.replace(/\\r\\n/g, '\\n');
         this._parse();
         return new Book(this.text, this.chapters);
     }
@@ -28,18 +28,18 @@ export default class BookParser {
                 '^(前言|序章|序言|楔子|引子|后记|尾声|番外|附录).{0,20}$',
 
                 // 英文 Chapter
-                '^(chapter|prologue|epilogue)\\s+[0-9ivxlcdm]+.*$',
+                '^(chapter|prologue|epilogue)\\\\s+[0-9ivxlcdm]+.*$',
 
                 // 1. xxx（可带文字）
-                '^([0-9]{1,4})\\.\\s*[^\\n]{0,30}$',
+                '^([0-9]{1,4})\\\\.\\\\s*[^\\\\n]{0,30}$',
 
                 // 1.2.3（纯数字层级，不应接文字）
-                '^([0-9]+\\.){2,}[0-9]+$'
+                '^([0-9]+\\\\.){2,}[0-9]+$'
             ].join('|'),
             'im'
         );
 
-        const lines = text.split('\n');
+        const lines = text.split('\\n');
         let index = 0;
         let matches = [];
 
