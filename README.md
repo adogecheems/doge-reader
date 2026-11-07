@@ -72,6 +72,23 @@ npm run build:prod
 
 编译完成后，在项目根目录下会出现 amr 文件，按上文一样操作即可安装
 
+## 原生 fs 插件
+
+部分固件（如 PenOS 4.3.5+）未内置 `fs` jsapi，依赖它的页面会空白。仓库内的
+`native/fs_plugin.c` 实现了一个同名原生模块，打包时随 `libs/` 进入 AMR，
+框架加载后 `import fs from 'fs'` 即可正常解析；即使插件不可用，应用也会
+经 `global.execShell` 兜底访问文件（速度较慢）。
+
+重新编译插件（目标 armv7 hard-float / glibc 2.23，需 zig 或
+arm-linux-gnueabihf-gcc）：
+
+```bash
+tools/build-fs-plugin.sh   # 产出并装入 libs/libjsapi_fs.so，附 ELF 自检
+```
+
+⚠️ 升级安装前先 `miniapp_cli uninstall`：同 appid 已存在时 install 不会
+重新提取 `libs/*.so`。
+
 ## 关于
 
 作者：adogecheems  

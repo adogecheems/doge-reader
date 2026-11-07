@@ -28,7 +28,7 @@
 </style>
 
 <script>
-import fs from 'fs';
+import { fs } from '../../utils/FileSystem/FileSystem.js';
 
 import IconButton from '../../components/icon-button.vue';
 import ButtonColumn from '../../components/button-column.vue';

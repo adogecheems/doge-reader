@@ -1,4 +1,4 @@
-import fs from 'fs';
+import { fs } from '../FileSystem/FileSystem.js';
 
 const ROOT = `${$dataDir}/__kv__`;
 
