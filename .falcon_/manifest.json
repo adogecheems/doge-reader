@@ -1,20 +1,24 @@
 {
   "appName": "Doge阅读",
   "version": "1.1.2",
-  "appid": "8001145141919811",
+  "appid": "8001145141919813",
   "icon": "app_icon.png",
   "quickjs": {
     "version": "20200705",
     "bigNum": false
   },
   "cert": {
-    "FakeStorage-c426ce5c.js.bin": {
-      "size": 1449,
-      "md5": "ad82628dc09038611396dacf73255a20"
+    "FakeStorage-b9d7400c.js.bin": {
+      "size": 1474,
+      "md5": "afb43efd7fe621fcc60a0dadac49d6a9"
     },
-    "Storage-bf78d62f.js.bin": {
+    "FileSystem-bf99f9b8.js.bin": {
+      "size": 4217,
+      "md5": "5d3dd59906f4a114009ca9de1279a855"
+    },
+    "Storage-d0889985.js.bin": {
       "size": 1604,
-      "md5": "86b283103ab6684d9a84c43d1ec543c3"
+      "md5": "84ae2b5c213feb06e4fdf5919a2571a1"
     },
     "app.js.bin": {
       "size": 3610,
@@ -30,11 +34,11 @@
     },
     "favorite.js.bin": {
       "size": 2460,
-      "md5": "a7f4d6a9a2d97756b39276eb17214fb7"
+      "md5": "bca345f714b6fa819624353dcfca0d36"
     },
     "filemanager.js.bin": {
-      "size": 11887,
-      "md5": "7f820c0a9c7cc4400e85e7e8650acf9f"
+      "size": 11893,
+      "md5": "0a50d2833e3a566356db510e36300688"
     },
     "history-card-56c0dfb5.js.bin": {
       "size": 1216,
@@ -42,31 +46,35 @@
     },
     "history.js.bin": {
       "size": 2448,
-      "md5": "1f037640c9a212e208dbe650fdca97c6"
+      "md5": "888104ef4b705c773285b2d6067eddfa"
     },
     "index.js.bin": {
       "size": 26302,
-      "md5": "f17be319fe3bb8a570e656bc57c10d46"
+      "md5": "861c0f756e7a91a1bf5054b5a522c8e4"
     },
     "info.js.bin": {
       "size": 698821,
       "md5": "a318280c6d6bea0d4af62bf4503a4e54"
     },
     "license.js.bin": {
-      "size": 1835,
-      "md5": "1d54f2d34f854e729cc795ba8024f7a8"
+      "size": 1860,
+      "md5": "8de590df4696ee80b7098c16fceb4deb"
     },
     "reader.js.bin": {
-      "size": 19616,
-      "md5": "0743daa8a3f9770b77f15e2b05842c61"
+      "size": 19621,
+      "md5": "a4e1f6393e4f5cd3495ae14eba087269"
     },
     "setting.js.bin": {
       "size": 4417,
-      "md5": "07b7923975ec3a0a06ffa9cc2dca677c"
+      "md5": "15f502aaf25c030328d4c02ea363cd47"
     },
     "assets/license.txt": {
       "size": 34523,
       "md5": "eb1e647870add0502f8f010b19de32af"
+    },
+    "libs/libjsapi_fs.so": {
+      "size": 800784,
+      "md5": "81630cbf93064420adcc334c5d9bc655"
     }
   }
 }
