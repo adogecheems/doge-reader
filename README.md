@@ -1,4 +1,4 @@
-<h1 style="text-align:center">Doge 阅读器</h1>
+<h1 style="text-align:center">READEX</h1>
 
 一款为有道词典笔 OS 设计的第三方阅读器程序，使用 Vue.js 构建
 
@@ -12,13 +12,6 @@
 - 阅读进度自动保存
 - 书签设置支持
 - 字体调节支持
-
-## 预览
-
-![reader.png](https://cdn.mmoe.work/public/doge-reader/reader.png)
-![menu.png](https://cdn.mmoe.work/public/doge-reader/menu.png)
-![index.png](https://cdn.mmoe.work/public/doge-reader/index.png)
-![example.png](https://cdn.mmoe.work/public/doge-reader/example.png)
 
 ## 安装
 
